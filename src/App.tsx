@@ -7,21 +7,27 @@ import Login from "./Components/Auth/Login";
 import Register from "./Components/Auth/Register";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
+import ChatProvider from "./context/ChatContext";
+import ChatPage from "./Components/Chat/ChatPage";
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route element={<ProtectedRoute />}>
+      <ChatProvider>
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route element={<ProtectedRoute />}>
               <Route path="/" element={<SkillsGrid />} />
-            <Route path="/skills/create" element={<CreateSkill />} />
-            <Route path="/skills/:id" element={<SkillDetails />} />
-          </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </BrowserRouter>
+              <Route path="/skills/create" element={<CreateSkill />} />
+              <Route path="/skills/:id" element={<SkillDetails />} />
+              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/chat/:userId" element={<ChatPage />} />
+            </Route>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </BrowserRouter>
+      </ChatProvider>
     </AuthProvider>
   );
 }
