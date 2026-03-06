@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { Box, CircularProgress, LinearProgress, Typography } from "@mui/material";
+import { Box, LinearProgress, Typography } from "@mui/material";
 import { getTeacherAvailability } from "../Queries/booking-queries";
 
 export interface TimeSlot {

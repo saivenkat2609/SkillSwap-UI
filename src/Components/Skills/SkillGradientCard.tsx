@@ -80,7 +80,6 @@ export default function SkillGradientCard({
         height: isLarge ? (styles as any).height : 180,
         width: (styles as any)?.width ?? "100%",
         background: gradient,
-        borderRadius: isLarge ? "12px" : "12px 12px 0 0",
         position: "relative",
         overflow: "hidden",
         ...(styles as any),
