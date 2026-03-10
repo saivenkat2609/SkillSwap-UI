@@ -1,21 +1,48 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { useEffect } from "react";
+import { BrowserRouter, Route, Routes, useNavigate, useLocation } from "react-router";
 import Header from "./Components/Header/Header";
 import SkillsGrid from "./Components/Skills/SkillsGrid";
 import SkillDetails from "./Components/Skills/SkillDetails";
 import CreateSkill from "./Components/Skills/CreateSkill";
 import Login from "./Components/Auth/Login";
 import Register from "./Components/Auth/Register";
-import { AuthProvider } from "./context/AuthContext";
+import Onboarding from "./Components/Auth/Onboarding";
+import ConfirmEmail from "./Components/Auth/ConfirmEmail";
+import ForgotPassword from "./Components/Auth/ForgotPassword";
+import ResetPassword from "./Components/Auth/ResetPassword";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import ChatProvider from "./context/ChatContext";
 import ChatPage from "./Components/Chat/ChatPage";
 import TeacherDashboard from "./Components/Teacher/TeacherDashboard";
 import MySessions from "./Components/Sessions/MySessions";
+
+// Lives inside BrowserRouter so it can use useNavigate
+function OnboardingGuard() {
+  const { userData, isLoading } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (
+      !isLoading &&
+      userData &&
+      !userData.isOnboardingComplete &&
+      location.pathname !== "/onboarding"
+    ) {
+      navigate("/onboarding");
+    }
+  }, [userData, isLoading, location.pathname]);
+
+  return null;
+}
+
 function App() {
   return (
     <AuthProvider>
       <ChatProvider>
         <BrowserRouter>
+          <OnboardingGuard />
           <Header />
           <Routes>
             <Route element={<ProtectedRoute />}>
@@ -27,10 +54,14 @@ function App() {
               <Route path="/my-sessions" element={<MySessions />} />
             </Route>
             <Route element={<ProtectedRoute role="Teacher" />}>
-              <Route path="/teacher/dashboard" element={<TeacherDashboard/>} />
+              <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/confirm-email" element={<ConfirmEmail />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
           </Routes>
         </BrowserRouter>
       </ChatProvider>

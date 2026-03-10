@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
+import { googleLogin } from "../Queries/auth-queries";
 import {
   Box,
   Button,
@@ -10,7 +12,9 @@ import {
   InputAdornment,
   Alert,
   Divider,
+  Paper,
 } from "@mui/material";
+import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -82,6 +86,7 @@ export default function Register() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [generalError, setGeneralError] = useState("");
+  const [registered, setRegistered] = useState(false);
 
   const requirements = checkRequirements(password);
   const strength = getStrength(requirements);
@@ -97,9 +102,8 @@ export default function Register() {
     setPasswordError("");
     setGeneralError("");
     try {
-      const res = await registerUser({ firstName, lastName, email, password, isTeacher });
-      login(res.data);
-      navigate("/");
+      await registerUser({ firstName, lastName, email, password, isTeacher });
+      setRegistered(true);
     } catch (err: any) {
       const errors: { code: string; description: string }[] = err.response?.data ?? [];
       errors.forEach(({ code, description }) => {
@@ -114,6 +118,29 @@ export default function Register() {
       setLoading(false);
     }
   };
+  if (registered) {
+    return (
+      <Box sx={{ minHeight: "calc(100vh - 64px)", display: "flex", alignItems: "center", justifyContent: "center", bgcolor: "#f8fafc", p: 3 }}>
+        <Paper elevation={0} sx={{ maxWidth: 440, width: "100%", p: 5, borderRadius: "16px", border: "1px solid #e2e8f0", textAlign: "center" }}>
+          <Box sx={{ width: 64, height: 64, borderRadius: "50%", bgcolor: "#ede9fe", display: "flex", alignItems: "center", justifyContent: "center", mx: "auto", mb: 3 }}>
+            <MarkEmailReadIcon sx={{ fontSize: 32, color: "#4f46e5" }} />
+          </Box>
+          <Typography variant="h5" sx={{ fontWeight: 800, color: "#0f172a", mb: 1.5, letterSpacing: -0.5 }}>
+            Check your inbox!
+          </Typography>
+          <Typography sx={{ color: "#64748b", fontSize: 15, lineHeight: 1.7, mb: 3 }}>
+            We sent a confirmation email to <strong>{email}</strong>. Click the link inside to activate your account.
+          </Typography>
+          <Typography sx={{ color: "#94a3b8", fontSize: 13 }}>
+            Already confirmed?{" "}
+            <Typography component="span" onClick={() => navigate("/login")} sx={{ color: "#4f46e5", fontWeight: 600, cursor: "pointer", "&:hover": { textDecoration: "underline" } }}>
+              Sign in
+            </Typography>
+          </Typography>
+        </Paper>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ display: "flex", minHeight: "calc(100vh - 64px)" }}>
@@ -476,29 +503,24 @@ export default function Register() {
             <Typography sx={{ fontSize: 12, color: "#94a3b8", px: 1 }}>OR</Typography>
           </Divider>
 
-          <Button
-            variant="outlined"
-            fullWidth
-            size="large"
-            sx={{
-              borderColor: "#e2e8f0",
-              color: "#0f172a",
-              bgcolor: "#ffffff",
-              py: 1.25,
-              fontWeight: 600,
-              fontSize: 14,
-              gap: 1.5,
-              "&:hover": { borderColor: "#94a3b8", bgcolor: "#f8fafc" },
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 20 20">
-              <path fill="#4285F4" d="M19.8 10.2c0-.6-.1-1.3-.2-1.9H10v3.6h5.5c-.2 1.2-1 2.2-2.1 2.9v2.3h3.4c2-1.8 3-4.5 3-7.9z" />
-              <path fill="#34A853" d="M10 20c2.8 0 5.2-.9 6.9-2.5l-3.4-2.3c-.9.6-2.1 1-3.5 1-2.7 0-5-1.8-5.8-4.3H.7v2.4C2.4 17.8 5.9 20 10 20z" />
-              <path fill="#FBBC05" d="M4.2 11.9c-.2-.6-.3-1.2-.3-1.9s.1-1.3.3-1.9V5.7H.7C.3 6.9 0 8.4 0 10s.2 3.1.7 4.3l3.5-2.4z" />
-              <path fill="#EA4335" d="M10 4c1.5 0 2.9.5 4 1.5l3-3C15.2.9 12.8 0 10 0 5.9 0 2.4 2.2.7 5.7l3.5 2.4C5 5.8 7.3 4 10 4z" />
-            </svg>
-            Continue with Google
-          </Button>
+          <Box sx={{ "& > div": { width: "100% !important" } }}>
+            <GoogleLogin
+              width="460"
+              text="signup_with"
+              theme="outline"
+              size="large"
+              onSuccess={async (credentialResponse) => {
+                try {
+                  const res = await googleLogin(credentialResponse.credential!);
+                  login(res.data);
+                  navigate("/onboarding");
+                } catch {
+                  setGeneralError("Google sign-up failed. Please try again.");
+                }
+              }}
+              onError={() => setGeneralError("Google sign-up failed. Please try again.")}
+            />
+          </Box>
         </Box>
       </Box>
     </Box>

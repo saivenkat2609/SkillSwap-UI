@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
+import { googleLogin } from "../Queries/auth-queries";
 import {
   Box,
   Button,
@@ -305,6 +307,7 @@ export default function Login() {
                 label={<Typography sx={{ fontSize: 13, color: "#64748b" }}>Remember me</Typography>}
               />
               <Typography
+                onClick={() => navigate("/forgot-password")}
                 sx={{
                   fontSize: 13,
                   color: "#4f46e5",
@@ -333,23 +336,28 @@ export default function Login() {
             <Typography sx={{ fontSize: 12, color: "#94a3b8", px: 1 }}>OR CONTINUE WITH</Typography>
           </Divider>
 
-          <Button
-            variant="outlined"
-            fullWidth
-            size="large"
-            startIcon={<GoogleIcon />}
-            sx={{
-              borderColor: "#e2e8f0",
-              color: "#0f172a",
-              bgcolor: "#ffffff",
-              py: 1.25,
-              fontWeight: 600,
-              fontSize: 14,
-              "&:hover": { borderColor: "#94a3b8", bgcolor: "#f8fafc" },
-            }}
-          >
-            Continue with Google
-          </Button>
+          <Box sx={{ "& > div": { width: "100% !important" } }}>
+            <GoogleLogin
+              width="420"
+              text="continue_with"
+              theme="outline"
+              size="large"
+              onSuccess={async (credentialResponse) => {
+                try {
+                  const res = await googleLogin(credentialResponse.credential!);
+                  login(res.data);
+                  if (res.data.isNewUser) {
+                    navigate("/onboarding");
+                  } else {
+                    navigate("/");
+                  }
+                } catch {
+                  setError("Google sign-in failed. Please try again.");
+                }
+              }}
+              onError={() => setError("Google sign-in failed. Please try again.")}
+            />
+          </Box>
         </Box>
       </Box>
     </Box>

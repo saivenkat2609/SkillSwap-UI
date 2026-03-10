@@ -6,6 +6,7 @@ export interface User {
   email: string;
   role: string;
   name: string;
+  isOnboardingComplete: boolean;
 }
 interface AuthContextType {
   userData: User | null;
