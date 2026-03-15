@@ -116,7 +116,7 @@ function BookingCard({ booking }: { booking: MyBooking }) {
 }
 
 export default function MySessions() {
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(1);
   const [bookings, setBookings] = useState<MyBooking[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");

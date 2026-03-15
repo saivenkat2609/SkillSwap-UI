@@ -6,7 +6,8 @@ import { useChat } from "../../context/ChatContext";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 
 function timeAgo(dateStr: string) {
-  const diff = Date.now() - new Date(dateStr).getTime();
+  const utcStr = dateStr.endsWith("Z") ? dateStr : dateStr + "Z";
+  const diff = Date.now() - new Date(utcStr).getTime();
   const mins = Math.floor(diff / 60000);
   if (mins < 1) return "just now";
   if (mins < 60) return `${mins}m ago`;

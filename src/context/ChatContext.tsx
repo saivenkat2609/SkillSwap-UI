@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useAuth } from "./AuthContext";
+import api from "../lib/api";
 
 interface ChatContextType {
   connection: HubConnection | null;
@@ -8,6 +9,7 @@ interface ChatContextType {
   activeChatUserId: string | null;
   setActiveChatUserId: (id: string | null) => void;
   sendMessage: (receiverId: string, message: string) => void;
+  refreshUnread: () => Promise<void>;
 }
 const ChatContext = createContext<ChatContextType | null>(null);
 
@@ -31,7 +33,7 @@ export default function ChatProvider({
   useEffect(() => {
     if (!userData || isLoading) return;
     const newConnection = new HubConnectionBuilder()
-      .withUrl("http://localhost:5211/chathub", { withCredentials: true })
+      .withUrl(`${import.meta.env.VITE_BFF_URL || "http://localhost:5211"}/chathub`, { withCredentials: true })
       .withAutomaticReconnect()
       .build();
     const initializeConnection = async () => {
@@ -40,7 +42,10 @@ export default function ChatProvider({
       newConnection.on(
         "ReceiveMessage",
         (messageObject: { senderId: string }) => {
-          if (messageObject.senderId !== activeChatUserIdRef.current) {
+          if (
+            messageObject.senderId !== userData.id &&
+            messageObject.senderId !== activeChatUserIdRef.current
+          ) {
             setUnreadCount((prev) => prev + 1);
           }
         },
@@ -55,6 +60,11 @@ export default function ChatProvider({
   const sendMessage = async (receiverId: string, message: string) => {
     connection?.invoke("SendMessage", receiverId, message);
   };
+
+  const refreshUnread = async () => {
+    const res = await api.get<number>("/api/messages/unread-count");
+    setUnreadCount(res.data);
+  };
   return (
     <ChatContext.Provider
       value={useMemo(() => {
@@ -64,6 +74,7 @@ export default function ChatProvider({
           activeChatUserId,
           setActiveChatUserId,
           sendMessage,
+          refreshUnread,
         };
       }, [
         connection,
@@ -71,6 +82,7 @@ export default function ChatProvider({
         activeChatUserId,
         setActiveChatUserId,
         sendMessage,
+        refreshUnread,
       ])}
     >
       {children}

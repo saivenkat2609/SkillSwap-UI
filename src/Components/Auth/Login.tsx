@@ -97,7 +97,7 @@ export default function Login() {
               <Typography sx={{ color: "#fff", fontWeight: 800, fontSize: 17 }}>S</Typography>
             </Box>
             <Typography sx={{ color: "#ffffff", fontWeight: 700, fontSize: 18, letterSpacing: -0.3 }}>
-              SkillSwap
+              SkillBridge
             </Typography>
           </Box>
 
@@ -164,7 +164,7 @@ export default function Login() {
           }}
         >
           <Typography sx={{ color: "rgba(255,255,255,0.85)", fontSize: 14, lineHeight: 1.6, mb: 1.5, fontStyle: "italic" }}>
-            "SkillSwap helped me learn React from a senior developer in just 2 weeks. The personalized approach made all the difference."
+            "SkillBridge helped me learn React from a senior developer in just 2 weeks. The personalized approach made all the difference."
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
             <Box
@@ -225,7 +225,7 @@ export default function Login() {
             >
               <Typography sx={{ color: "#fff", fontWeight: 800, fontSize: 15 }}>S</Typography>
             </Box>
-            <Typography sx={{ fontWeight: 700, fontSize: 17, color: "#0f172a" }}>SkillSwap</Typography>
+            <Typography sx={{ fontWeight: 700, fontSize: 17, color: "#0f172a" }}>SkillBridge</Typography>
           </Box>
 
           <Typography variant="h4" sx={{ fontWeight: 800, color: "#0f172a", mb: 0.75, letterSpacing: -0.5 }}>

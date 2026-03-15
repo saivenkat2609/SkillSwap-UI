@@ -22,7 +22,7 @@ export const createSkill = (data: FormData) =>
   });
 
 export const getReviewsBySkillId = (skillId: number) =>
-  api.get<Review[]>(`/api/review?skillId=${skillId}`);
+  api.get<Review[]>(`/api/reviews?skillId=${skillId}`);
 
 export const getTeacherStats = () => api.get(`/api/teachers/stats`);
 

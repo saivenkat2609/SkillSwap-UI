@@ -11,7 +11,7 @@ import {
   Slider,
   Pagination,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SkillsCard from "./SkillsCard";
 import { getSkills, getCategories } from "../Queries/skill-queries";
 import { useSearchParams } from "react-router";
@@ -100,8 +100,12 @@ export default function SkillsGrid() {
     getCategories().then((res) => setCategories(res.data));
   }, []);
 
-  // Debounce search input → update URL after 400ms
+  const prevInputRef = useRef(inputValue);
+
+  // Debounce search input → update URL after 400ms (only when input actually changes)
   useEffect(() => {
+    if (prevInputRef.current === inputValue) return;
+    prevInputRef.current = inputValue;
     const timer = setTimeout(() => {
       setSearchParams((prev) => {
         const next = new URLSearchParams(prev);
@@ -345,7 +349,7 @@ export default function SkillsGrid() {
             <Chip
               key={cat.categoryId}
               label={cat.name}
-              onClick={() => updateParams({ categoryId: String(cat.categoryId), page: "1" })}
+              onClick={() => updateParams({ categoryId: activeCategoryId === cat.categoryId ? null : String(cat.categoryId), page: "1" })}
               sx={chipSx(activeCategoryId === cat.categoryId)}
             />
           ))}

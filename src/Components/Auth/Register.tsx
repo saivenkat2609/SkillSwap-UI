@@ -187,7 +187,7 @@ export default function Register() {
               <Typography sx={{ color: "#fff", fontWeight: 800, fontSize: 17 }}>S</Typography>
             </Box>
             <Typography sx={{ color: "#ffffff", fontWeight: 700, fontSize: 18, letterSpacing: -0.3 }}>
-              SkillSwap
+              SkillBridge
             </Typography>
           </Box>
 
@@ -209,7 +209,7 @@ export default function Register() {
           <Typography
             sx={{ color: "rgba(255,255,255,0.6)", fontSize: 15, lineHeight: 1.6, mb: 5 }}
           >
-            Join over 10,000 learners who have already accelerated their careers with SkillSwap.
+            Join over 10,000 learners who have already accelerated their careers with SkillBridge.
           </Typography>
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -254,7 +254,7 @@ export default function Register() {
             ))}
           </Box>
           <Typography sx={{ color: "rgba(255,255,255,0.8)", fontSize: 13.5, lineHeight: 1.6, mb: 1.5, fontStyle: "italic" }}>
-            "I went from beginner to job-ready in 3 months. The teachers on SkillSwap are truly exceptional."
+            "I went from beginner to job-ready in 3 months. The teachers on SkillBridge are truly exceptional."
           </Typography>
           <Typography sx={{ color: "rgba(255,255,255,0.5)", fontSize: 12 }}>
             Alex K. · Software Engineer
@@ -300,7 +300,7 @@ export default function Register() {
             >
               <Typography sx={{ color: "#fff", fontWeight: 800, fontSize: 15 }}>S</Typography>
             </Box>
-            <Typography sx={{ fontWeight: 700, fontSize: 17, color: "#0f172a" }}>SkillSwap</Typography>
+            <Typography sx={{ fontWeight: 700, fontSize: 17, color: "#0f172a" }}>SkillBridge</Typography>
           </Box>
 
           <Typography variant="h4" sx={{ fontWeight: 800, color: "#0f172a", mb: 0.75, letterSpacing: -0.5 }}>

@@ -55,7 +55,7 @@ export default function Onboarding() {
           variant="h5"
           sx={{ fontWeight: 800, color: "#0f172a", mb: 1, letterSpacing: -0.5 }}
         >
-          What brings you to SkillSwap?
+          What brings you to SkillBridge?
         </Typography>
         <Typography sx={{ fontSize: 14, color: "#64748b", mb: 4 }}>
           This helps us personalise your experience. You can change this later.

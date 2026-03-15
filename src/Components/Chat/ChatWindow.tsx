@@ -7,7 +7,8 @@ import { useAuth } from "../../context/AuthContext";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 
 function formatTime(dateStr: string) {
-  return new Date(dateStr).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const utcStr = dateStr.endsWith("Z") ? dateStr : dateStr + "Z";
+  return new Date(utcStr).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
 function getInitials(name: string) {
@@ -29,7 +30,7 @@ export default function ChatWindow({ otherUserId, otherUserName }: Props) {
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
-  const { connection, sendMessage, setActiveChatUserId } = useChat();
+  const { connection, sendMessage, setActiveChatUserId, refreshUnread } = useChat();
   const { userData } = useAuth();
 
   // Load history + mark as read when opening a conversation
@@ -44,7 +45,7 @@ export default function ChatWindow({ otherUserId, otherUserName }: Props) {
       .then((res) => setMessages(res.data))
       .finally(() => setLoading(false));
 
-    markAsRead(otherUserId).catch(() => {});
+    markAsRead(otherUserId).then(() => refreshUnread()).catch(() => {});
 
     return () => setActiveChatUserId(null);
   }, [otherUserId]);

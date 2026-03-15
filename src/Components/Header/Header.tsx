@@ -77,7 +77,7 @@ export default function Header() {
             fontSize={17}
             sx={{ color: "#0f172a", letterSpacing: -0.4 }}
           >
-            SkillSwap
+            SkillBridge
           </Typography>
         </Box>
 
