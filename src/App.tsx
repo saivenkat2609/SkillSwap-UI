@@ -58,6 +58,7 @@ function App() {
             <Route element={<ProtectedRoute role="Teacher" />}>
               <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
             </Route>
+            <Route path="/" element={<SkillsGrid />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/onboarding" element={<Onboarding />} />

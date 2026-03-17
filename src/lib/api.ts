@@ -2,11 +2,9 @@ import axios from "axios";
 
 const successFn = (response: any) => response;
 const errorFn = (error: any) => {
+  const PUBLIC_PATHS = ["/", "/login", "/register"];
   if (error.response?.status === 401) {
-    if (
-      window.location.pathname !== "/login" &&
-      window.location.pathname !== "/register"
-    ) {
+    if (!PUBLIC_PATHS.includes(window.location.pathname)) {
       window.location.href = "/login";
     }
   }
